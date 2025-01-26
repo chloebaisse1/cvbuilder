@@ -2,18 +2,29 @@
 import {
   educationsPreset,
   experiencesPreset,
+  hobbiesPreset,
   languagesPreset,
   personalDetailsPreset,
+  skillsPreset,
 } from "@/presets"
-import { Education, Experience, Language, PersonalDetails } from "@/type"
+import {
+  Education,
+  Experience,
+  Hobby,
+  Language,
+  PersonalDetails,
+  Skill,
+} from "@/type"
 import { Eye, RotateCw } from "lucide-react"
 import Image from "next/image"
 import { useEffect, useState } from "react"
 import CVPreview from "./components/CVPreview"
 import EducationForm from "./components/EducationForm"
 import ExperienceForm from "./components/ExperienceForm"
+import HobbyForm from "./components/HobbyForm"
 import LanguageForm from "./components/LanguageForm"
 import PersonalDetailsFrom from "./components/PersonalDetailsFrom"
+import SkillForm from "./components/SkillForm"
 
 export default function Home() {
   const [personalDetails, setPersonalDetails] = useState<PersonalDetails>(
@@ -25,6 +36,8 @@ export default function Home() {
   const [experiences, setExperience] = useState<Experience[]>(experiencesPreset)
   const [educations, setEducations] = useState<Education[]>(educationsPreset)
   const [languages, setLanguages] = useState<Language[]>(languagesPreset)
+  const [skills, setSkills] = useState<Skill[]>(skillsPreset)
+  const [hobbies, setHobbies] = useState<Hobby[]>(hobbiesPreset)
 
   useEffect(() => {
     const defaultImageUrl = "/profile.jpg"
@@ -85,6 +98,8 @@ export default function Home() {
   const handleResetExperiences = () => setExperience([])
   const handleResetEducations = () => setEducations([])
   const handleResetLanguages = () => setLanguages([])
+  const handleResetSkills = () => setSkills([])
+  const handleResetHobbies = () => setHobbies([])
 
   return (
     <div>
@@ -161,6 +176,36 @@ export default function Home() {
                 </button>
               </div>
               <LanguageForm languages={languages} setLanguages={setLanguages} />
+
+              <div className="flex justify-between">
+                <div className="w-1/2">
+                  <div className="flex justify-between items-center">
+                    <h1 className="badge badge-info badge-outline">
+                      Compétences
+                    </h1>
+                    <button
+                      onClick={handleResetSkills}
+                      className="btn btn-info btn-sm"
+                    >
+                      <RotateCw className="w-4" />
+                    </button>
+                  </div>
+                  <SkillForm skills={skills} setSkills={setSkills} />
+                </div>
+
+                <div className="ml-4 w-1/2">
+                  <div className="flex justify-between items-center">
+                    <h1 className="badge badge-info badge-outline">Loisirs</h1>
+                    <button
+                      onClick={handleResetHobbies}
+                      className="btn btn-info btn-sm"
+                    >
+                      <RotateCw className="w-4" />
+                    </button>
+                  </div>
+                  <HobbyForm hobbies={hobbies} setHobbies={setHobbies} />
+                </div>
+              </div>
             </div>
           </div>
 
@@ -202,6 +247,8 @@ export default function Home() {
                 experiences={experiences}
                 educations={educations}
                 languages={languages}
+                skills={skills}
+                hobbies={hobbies}
               />
             </div>
           </div>

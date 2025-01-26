@@ -1,4 +1,11 @@
-import { Education, Experience, Language, PersonalDetails } from "@/type"
+import {
+  Education,
+  Experience,
+  Hobby,
+  Language,
+  PersonalDetails,
+  Skill,
+} from "@/type"
 import {
   BriefcaseBusiness,
   GraduationCap,
@@ -17,6 +24,8 @@ type Props = {
   experiences: Experience[]
   educations: Education[]
   languages: Language[]
+  skills: Skill[]
+  hobbies: Hobby[]
 }
 
 function formatDate(dateString: string): string {
@@ -66,6 +75,8 @@ const CVPreview: React.FC<Props> = ({
   experiences,
   educations,
   languages,
+  skills,
+  hobbies,
 }) => {
   return (
     <div
@@ -128,6 +139,17 @@ const CVPreview: React.FC<Props> = ({
           </div>
 
           <div className="mt-6 ">
+            <h1 className="uppercase font-bold my-2">Compétences</h1>
+            <div className="flex flex-wrap gap-2">
+              {skills.map((skill, index) => (
+                <p key={index} className="badge badge-info uppercase">
+                  {skill.name}
+                </p>
+              ))}
+            </div>
+          </div>
+
+          <div className="mt-6 ">
             <h1 className="uppercase font-bold my-2">Langues</h1>
             <div className="flex flex-col space-y-2">
               {languages.map((lang, index) => (
@@ -138,6 +160,17 @@ const CVPreview: React.FC<Props> = ({
                   <div className="flex mt-2">
                     {getStarRating(lang.proficiency)}
                   </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="mt-6 ">
+            <h1 className="uppercase font-bold my-2">Hobbies</h1>
+            <div className="flex flex-col space-y-2">
+              {hobbies.map((hobby, index) => (
+                <div key={index}>
+                  <span className="capitalize">{hobby.name}</span>
                 </div>
               ))}
             </div>
