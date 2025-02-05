@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client"
 import {
   educationsPreset,
@@ -123,7 +122,7 @@ export default function Home() {
         const pdfWidth = pdf.internal.pageSize.getWidth()
         const pdfHeight = (canvas.height * pdfWidth) / canvas.width
 
-        pdf.addImage(imgData, "PNG", 0, 0, 211, 298)
+        pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight)
         pdf.save(`cv.pdf`)
 
         const modal = document.getElementById("my_modal_3") as HTMLDialogElement
