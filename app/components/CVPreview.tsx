@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   Education,
   Experience,
@@ -26,6 +27,8 @@ type Props = {
   languages: Language[]
   skills: Skill[]
   hobbies: Hobby[]
+  download?: boolean
+  ref?: any
 }
 
 function formatDate(dateString: string): string {
@@ -77,10 +80,15 @@ const CVPreview: React.FC<Props> = ({
   languages,
   skills,
   hobbies,
+  download,
+  ref,
 }) => {
   return (
     <div
-      className={`flex p-16 w-[950px] h-[1200px] shadow-lg`}
+      ref={ref}
+      className={`flex p-16 w-[950px] h-[1200px] shadow-lg ${
+        download ? "mb-10" : ""
+      }`}
       data-theme={theme}
     >
       <div className="flex flex-col w-1/3">
@@ -194,14 +202,14 @@ const CVPreview: React.FC<Props> = ({
             <h1 className="uppercase font-bold mb-2">Experiences</h1>
             <ul className="steps steps-vertical space-y-3">
               {experiences.map((exp, index) => (
-                <li className="step step-primary" key={index}>
+                <li className="step step-info" key={index}>
                   <div className="text-left">
                     <h2 className="flex text-md uppercase font-bold">
                       <BriefcaseBusiness className="w-5" />
                       <span className="ml-2">{exp.jobTitle}</span>
                     </h2>
                     <div className="text-sm my-2">
-                      <span className="badge badge-primary">
+                      <span className="badge badge-info">
                         {exp.companyName}
                       </span>
                       <span className="italic ml-2">
@@ -219,14 +227,14 @@ const CVPreview: React.FC<Props> = ({
             <h1 className="uppercase font-bold mb-2">Formations</h1>
             <ul className="steps steps-vertical space-y-3">
               {educations.map((edu, index) => (
-                <li className="step step-primary" key={index}>
+                <li className="step step-info" key={index}>
                   <div className="text-left">
                     <h2 className="flex text-md uppercase font-bold">
                       <GraduationCap className="w-5" />
                       <span className="ml-2">{edu.degree}</span>
                     </h2>
                     <div className="text-sm my-2">
-                      <span className="badge badge-primary">{edu.school}</span>
+                      <span className="badge badge-info">{edu.school}</span>
                       <span className="italic ml-2">
                         {formatDate(edu.startDate)} au {formatDate(edu.endDate)}
                       </span>

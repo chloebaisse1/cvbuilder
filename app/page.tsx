@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client"
 import {
   educationsPreset,
@@ -15,9 +16,12 @@ import {
   PersonalDetails,
   Skill,
 } from "@/type"
-import { Eye, RotateCw } from "lucide-react"
+import confetti from "canvas-confetti"
+import html2canvas from "html2canvas-pro"
+import jsPDF from "jspdf"
+import { Eye, RotateCw, Save } from "lucide-react"
 import Image from "next/image"
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import CVPreview from "./components/CVPreview"
 import EducationForm from "./components/EducationForm"
 import ExperienceForm from "./components/ExperienceForm"
@@ -101,6 +105,44 @@ export default function Home() {
   const handleResetSkills = () => setSkills([])
   const handleResetHobbies = () => setHobbies([])
 
+  const cvPreviewRef = useRef(null)
+
+  const handleDownloadPdf = async () => {
+    const element = cvPreviewRef.current
+    if (element) {
+      try {
+        const canvas = await html2canvas(element, { scale: 3, useCORS: true })
+
+        const imgData = canvas.toDataURL("image/png")
+        const pdf = new jsPDF({
+          orientation: "portrait",
+          unit: "mm",
+          format: "A4",
+        })
+
+        const pdfWidth = pdf.internal.pageSize.getWidth()
+        const pdfHeight = (canvas.height * pdfWidth) / canvas.width
+
+        pdf.addImage(imgData, "PNG", 0, 0, 211, 298)
+        pdf.save(`cv.pdf`)
+
+        const modal = document.getElementById("my_modal_3") as HTMLDialogElement
+        if (modal) {
+          modal.close()
+        }
+
+        confetti({
+          particleCount: 100,
+          spread: 70,
+          origin: { y: 0.6 },
+          zIndex: 9999,
+        })
+      } catch (error) {
+        console.error("Erreur lors de la génération du PDF:", error)
+      }
+    }
+  }
+
   return (
     <div>
       <div className="hidden lg:block">
@@ -111,7 +153,15 @@ export default function Home() {
                 CV
                 <span className="text-info">Builder</span>
               </h1>
-              <button className="btn btn-info">
+
+              <button
+                className="btn btn-info"
+                onClick={() =>
+                  (
+                    document.getElementById("my_modal_3") as HTMLDialogElement
+                  ).showModal()
+                }
+              >
                 Prévisualiser
                 <Eye className="w-4" />
               </button>
@@ -253,6 +303,43 @@ export default function Home() {
             </div>
           </div>
         </section>
+
+        <dialog id="my_modal_3" className="modal">
+          <div className="modal-box w-full max-w-6xl x-auto p-x-4 sm:px-6 lg:px-8">
+            <form method="dialog">
+              {/* if there is a button in form, it will close the modal */}
+              <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+                ✕
+              </button>
+            </form>
+
+            <div className="mt-5">
+              <div className="flex justify-end mb-5">
+                <button onClick={handleDownloadPdf} className="btn btn-info">
+                  Télécharger
+                  <Save className="w-4" />
+                </button>
+              </div>
+
+              <div className="w-full max-x-full overflow-auto">
+                <div className="w-full max-w-full flex justify-center items-center">
+                  <CVPreview
+                    personalDetails={personalDetails}
+                    file={file}
+                    theme={theme}
+                    experiences={experiences}
+                    educations={educations}
+                    languages={languages}
+                    skills={skills}
+                    hobbies={hobbies}
+                    download={true}
+                    ref={cvPreviewRef}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </dialog>
       </div>
 
       <div className="lg:hidden">
